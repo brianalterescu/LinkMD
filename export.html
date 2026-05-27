@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>LinkMD - Scrape Report</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
+
+
+</head>
+
+<style>
+  :root {
+    --gradient: linear-gradient(135deg, #46D8FF 0%, #0094FF 100%);
+    --dark: #121212;
+    --grey: #86868b;
+    --border: #e5e5e7;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    padding: 40px;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+
+  /* Professional Header with App Icon */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .report-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+  }
+
+  .header-text-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 0;
+  }
+
+  .report-meta {
+    font-size: 14px;
+    color: var(--grey);
+    margin-top: 2px;
+  }
+
+  /* Styled Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background-color: #fafafa;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--grey);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Highlight the confirmation codes */
+  .code-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: #0094FF;
+  }
+
+  /* Brand Signature - Clean Sans-Serif */
+  .signature-report {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--grey);
+    text-align: right;
+  }
+
+  .signature-report b {
+    color: var(--dark);
+    font-weight: 800;
+  }
+
+  @media print {
+    #printTriggerBtn {
+      display: none;
+    }
+
+    body {
+      padding: 0;
+    }
+
+    .code-cell {
+      color: #0094FF !important;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+</style>
+
+<body>
+  <header>
+    <img src="icon.png" alt="LinkMD Logo" class="report-logo">
+    <div class="header-text-container">
+      <h2>LinkMD Workflow Report</h2>
+
+      <div class="report-meta"><span id="reportDate">X</span></div>
+    </div>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Appointment Time</th>
+        <th>Status Code</th>
+      </tr>
+    </thead>
+    <tbody id="reportTableBody">
+
+    </tbody>
+  </table>
+
+  <div class="signature-report">
+    Workflow Automation by <a style="color: #0094FF; font-style: italic;" href="https://brianalterescu.com">Brian Alterescu</a>
+  </div>
+
+  <script src="export.js"></script>
+
+</body>
+
+</html>

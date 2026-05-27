@@ -1,0 +1,39 @@
+{
+    "manifest_version": 3,
+    "name": "LinkMD",
+    "homepage_url": "https://brianalterescu.com/projects/LinkMD/",
+    "version": "1.0.3",
+    "description": "Automates appointment confirmations between Updox and PracticeFusion.",
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting"
+    ],
+    "icons": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    },
+    "host_permissions": [
+        "*://*.myupdox.com/*",
+        "*://*.practicefusion.com/*",
+        "https://npiregistry.cms.hhs.gov/*"
+    ],
+    "background": {
+  "service_worker": "background.js"
+},
+    "content_scripts": [
+        {
+            "matches": ["*://*.myupdox.com/*"],
+            "js": ["updoxContent.js"]
+        },
+        {
+            "matches": ["*://*.practicefusion.com/*"],
+            "js": ["pfContent.js"]
+        }
+    ]
+}

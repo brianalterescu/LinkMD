@@ -1,0 +1,1 @@
+Automation Workflow for Updox & PracticeFusion EHR to automatically document confirmed appointments and messages through Updox and store interaction records using the PractionFusion Web Interface. Designed for Allen Medical Associates.

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gradient: linear-gradient(135deg, #46D8FF 0%, #0094FF 100%);
+      --dark: #121212;
+      --grey: #86868b;
+      --bg: #ffffff;
+      --border: #e5e5e7;
+    }
+
+    body {
+      width: 400px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--dark);
+      margin: 0;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Matches your <div class="header"> */
+    .header {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: #0094FF
+    }
+
+    .sub-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--grey);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Matches your <p> instruction */
+    p {
+      font-size: 13px;
+      color: var(--grey);
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    /* Universal Button Style */
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s, background 0.2s;
+      display: block;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Specific Button IDs */
+    #scrapeUpdoxBtn {
+      background-color: var(--dark);
+      color: #fff;
+    }
+
+    #scrapeUpdoxBtn:hover {
+      background-color: #333;
+    }
+
+    #runPfBtn {
+      background: var(--gradient);
+      color: #fff;
+    }
+
+    #runPfBtn:hover {
+      opacity: 0.9;
+    }
+
+    #exportPdfBtn {
+      background-color: #fff;
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+
+    #exportPdfBtn:hover {
+      background-color: #fafafa;
+      border-color: #ccc;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-bar-bg {
+      background: #eee;
+      height: 8px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient);
+      transition: width 0.4s ease;
+    }
+
+    .patient-status-text {
+      font-size: 12px;
+      color: var(--grey);
+      font-style: italic;
+      text-align: center;
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-clear {
+      background: #fff;
+      color: #555;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-clear:hover {
+      background: #fdfdfd;
+      color: #000;
+      border-color: #999;
+    }
+
+    /* Matches your <div class="status-panel"> */
+    .status-panel {
+      background-color: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    #statusText {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey);
+    }
+
+    /* Matches your <div class="signature"> */
+    .signature {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--grey);
+      font-weight: 500;
+    }
+
+    .signature a {
+      color: #0094FF;
+      text-decoration: none;
+      font-family: 'Trebuchet MS', sans-serif;
+      font-weight: 800;
+      transition: color 0.2s;
+    }
+
+    .signature a:hover {
+      color: #0094FF;
+    }
+
+    #stopBtn,
+    #clearDataBtn {
+      background-color: #fff;
+      color: #ff3b30;
+      /* System Red */
+      border: 1px solid #ff3b30;
+      margin-top: 5px;
+    }
+
+    #stopBtn:hover {
+      background-color: #fff5f5;
+    }
+
+    /* Ensure the parent has a width and the child is visible */
+    .progress-bar-bg {
+      width: 100%;
+      background-color: #eee;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: block !important;
+    }
+
+    #progressBarFill {
+      display: block !important;
+      height: 100%;
+      width: 0%;
+      /* JS will change this */
+      background: linear-gradient(135deg, #46D8FF 0%, #0094FF 100%);
+      transition: width 0.5s ease-in-out;
+    }
+
+    .npi-container {
+      /* margin-top: 20px; */
+      /* padding-top: 20px; */
+      border-top: 1px solid var(--border);
+    }
+
+    .npi-title {
+      font-size: 12px;
+      color: var(--grey);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .npi-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    #npiInput {
+      /* flex: 1; */
+      padding: 10px;
+      width: 200px;
+      height: 20px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #npiInput:focus {
+      border-color: #0094FF;
+    }
+
+    .btn-lookup {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0px;
+      margin-top: 5px;
+      height: 30px;
+      width: 120px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-lookup:hover {
+      opacity: 0.9;
+    }
+
+    .npi-status {
+      font-size: 12px;
+      margin-top: 8px;
+      font-style: italic;
+      color: #0094FF;
+      height: 14px;
+      /* Prevents layout shift when text appears */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">LinkMD</div>
+  <div class="sub-header">PracticeFusion Updox Sync</div>
+  <p style="align-items: center;">Scroll to the bottom of Updox to load all patients.</p>
+  <button id="scrapeUpdoxBtn">1. Scrape Updox List</button>
+  <button id="runPfBtn">2. Run PracticeFusion Update</button>
+  <button id="exportPdfBtn">3. View / Export to PDF</button>
+  <!-- <button id="stopBtn" class="btn-stop">Stop Automation</button> -->
+  <div class="status-panel">
+    <span id="statusText">Status: Waiting to start...</span>
+  </div>
+  <!-- TBD - Coming Soon! -->
+  <!-- <div class="status-panel">
+    <div class="progress-header">
+      <span id="statusText">Ready to start...</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div id="progressBarFill" class="progress-bar-fill"></div>
+    </div>
+    <div id="patientStatus" class="patient-status-text"></div>
+  </div> -->
+
+  <div class="action-row">
+    <button id="stopBtn" class="btn-stop">Stop Automation</button>
+    <button id="clearDataBtn" class="btn-clear">Clear Data</button>
+  </div>
+
+  <div class="npi-container">
+    <h4 class="npi-title">Quick NPI Lookup</h4>
+    <div class="npi-input-group">
+      <input type="text" id="npiInput" placeholder="Enter 10-digit NPI" maxlength="10">
+      <button id="npiLookupBtn" class="btn-lookup">Copy NPI Data</button>
+    </div>
+    <div id="npiStatus" class="npi-status"></div>
+  </div>
+
+  <div class="signature">
+    Made by <a href="https://brianalterescu.com" target="_blank">Brian Alterescu</a>
+  </div>
+
+  <p>Version 1.1.0</p>
+  <p>Still a work in progress...</p>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
