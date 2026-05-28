@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Doctor's Note - LinkMD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: letter;
+            margin: 1in;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .clinic-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            margin-top: 0px;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .date-line {
+            margin-bottom: 40px;
+        }
+
+        .patient-line {
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .patient-line span {
+            margin-right: 50px;
+        }
+
+        .body-text {
+            margin-bottom: 60px;
+            text-align: justify;
+        }
+
+        .signature-block {
+            margin-top: -10px;
+        }
+
+        /* Apply the Google Font */
+        .sig-font {
+            font-family: 'Mrs Saint Delafield', cursive;
+            font-size: 28pt;
+            color: #1a1a1a;
+            margin: 10px 0;
+        }
+
+        .signature-block p {
+            margin: 2px 0;
+        }
+
+        .no-print {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .printBtn {
+            background: #0094FF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="clinic-header">
+        <img src='https://www.allenmedicalassociates.com/assets/images/logo-dr-allen.jpg'
+            alt="Allen Medical Associates Logo" style="max-height: 80px; margin-top: 0px;">
+        <!-- <h1>Allen Medical Associates</h1> -->
+        <p>1045 W. Jericho Tpke, Smithtown, NY 11787</p>
+        <p>Phone: (631) 543 - 8844 | Fax: (631) 543 - 8840</p>
+    </div>
+
+    <div class="date-line" id="docDate">Loading...</div>
+
+    <div class="patient-line">
+        RE: &nbsp; &nbsp; PATIENT: <span id="docName">Loading...</span>
+        DOB: <span id="docDOB">Loading...</span>
+    </div>
+
+    <div class="body-text">
+        <p>To Whom It May Concern,</p>
+        <p style="text-indent: 50px; line-height: 2rem;"><span id="docReason">Loading...</span> If you have any additional questions, please do
+            not hesitate to contact my office at (631) 543 - 8844. Thank you.</p>
+    </div>
+
+    <div class="signature-block">
+        <p>Sincerely,</p>
+        <p class="sig-font">Dr. Marc Allen</p>
+        <p>Marc Allen, DO</p>
+        <p>License #: 223834</p>
+    </div>
+
+    <script>
+        // Load the data from ScheduleScout storage and inject it into the DOM
+        chrome.storage.local.get(['currentLetter'], (result) => {
+            if (result.currentLetter) {
+                document.getElementById('docDate').innerText = result.currentLetter.date;
+                document.getElementById('docName').innerText = result.currentLetter.name
+                    .toUpperCase(); // Capitalize for emphasis
+                document.getElementById('docDOB').innerText = result.currentLetter.dob;
+                document.getElementById('docReason').innerText = result.currentLetter.reason;
+            } else {
+                document.body.innerHTML =
+                    "<h2 style='text-align:center; margin-top:50px;'>Error: No letter data found. Please generate from the extension.</h2>";
+            }
+        });
+    </script>
+
+    <script src="letter.js"></script>
+</body>
+
+</html>

@@ -288,6 +288,50 @@
       height: 14px;
       /* Prevents layout shift when text appears */
     }
+
+    /* // Doctor's Note Generator Styles */
+    .note-container {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .input-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
   </style>
 </head>
 
@@ -302,17 +346,7 @@
   <div class="status-panel">
     <span id="statusText">Status: Waiting to start...</span>
   </div>
-  <!-- TBD - Coming Soon! -->
-  <!-- <div class="status-panel">
-    <div class="progress-header">
-      <span id="statusText">Ready to start...</span>
-      <span id="progressPercent">0%</span>
-    </div>
-    <div class="progress-bar-bg">
-      <div id="progressBarFill" class="progress-bar-fill"></div>
-    </div>
-    <div id="patientStatus" class="patient-status-text"></div>
-  </div> -->
+
 
   <div class="action-row">
     <button id="stopBtn" class="btn-stop">Stop Automation</button>
@@ -328,11 +362,34 @@
     <div id="npiStatus" class="npi-status"></div>
   </div>
 
+  <div class="note-container">
+    <h4 class="section-title">Generate Doctor's Note</h4>
+    <div class="input-stack">
+      <select id="letterType" class="form-input">
+        <option value="custom">Custom Restriction Note</option>
+        <option value="general">General Visit Note</option>
+        <option value="return">Return to Work/School Note</option>
+      </select>
+
+      <input type="text" id="noteName" placeholder="Patient Name" class="form-input">
+      <input type="text" id="noteDOB" placeholder="DOB (MM/DD/YYYY)" class="form-input">
+
+      <textarea id="noteReason" placeholder="e.g., can only lift a maximum of 10 pounds..."
+        class="form-textarea"></textarea>
+
+      <input type="text" id="returnDate" placeholder="Return Date (e.g., 05/29/2026)" class="form-input"
+        style="display: none;">
+
+      <button id="generateNoteBtn" class="btn-primary">Generate Letter</button>
+    </div>
+    <div id="noteStatus" class="status-text"></div>
+  </div>
+
   <div class="signature">
     Made by <a href="https://brianalterescu.com" target="_blank">Brian Alterescu</a>
   </div>
 
-  <p>Version 1.1.0</p>
+  <p>Version 1.2.0</p>
   <p>Still a work in progress...</p>
 
   <script src="popup.js"></script>

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "LinkMD",
     "homepage_url": "https://brianalterescu.com/projects/LinkMD/",
-    "version": "1.0.3",
+    "version": "1.2.0",
     "description": "Automates appointment confirmations between Updox and PracticeFusion.",
     "permissions": [
         "storage",

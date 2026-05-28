@@ -258,6 +258,7 @@ document.getElementById('clearDataBtn').addEventListener('click', async () => {
     });
 });
 
+// NPI Lookup Logic
 document.addEventListener('DOMContentLoaded', () => {
     const npiLookupBtn = document.getElementById('npiLookupBtn');
     const npiInput = document.getElementById('npiInput');
@@ -364,3 +365,159 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ==========================================
+// USABILITY ENHANCEMENTS (Dates & Navigation)
+// ==========================================
+
+// 1. Auto-format MM/DD/YYYY as the user types (Numbers Only)
+const autoFormatDate = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 8);
+    if (val.length > 4) {
+        e.target.value = `${val.substring(0, 2)}/${val.substring(2, 4)}/${val.substring(4, 8)}`;
+    } else if (val.length > 2) {
+        e.target.value = `${val.substring(0, 2)}/${val.substring(2, 4)}`;
+    } else {
+        e.target.value = val;
+    }
+};
+
+// Safely attach listeners to the date inputs
+const noteDOBInput = document.getElementById('noteDOB');
+const returnDateInput = document.getElementById('returnDate');
+if (noteDOBInput) noteDOBInput.addEventListener('input', autoFormatDate);
+if (returnDateInput) returnDateInput.addEventListener('input', autoFormatDate);
+
+// 2. Arrow Key Navigation for visible fields
+const inputSequence = ['noteName', 'noteDOB', 'noteReason', 'returnDate'];
+inputSequence.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault(); // Prevent cursor jumping inside text inputs
+            
+            // Only gather inputs that are currently visible on the screen
+            const visibleInputs = inputSequence
+                .map(inputId => document.getElementById(inputId))
+                .filter(node => node && window.getComputedStyle(node).display !== 'none');
+            
+            const currentIndex = visibleInputs.indexOf(e.target);
+            let nextIndex = e.key === 'ArrowDown' ? currentIndex + 1 : currentIndex - 1;
+            
+            if (nextIndex >= 0 && nextIndex < visibleInputs.length) {
+                visibleInputs[nextIndex].focus();
+            }
+        }
+    });
+});
+
+// 3. Convert MM/DD/YYYY to "Month Day, Year" Helper
+const formatLongDate = (dateStr) => {
+    const [month, day, year] = dateStr.split('/');
+    if (!month || !day || !year) return dateStr; 
+    
+    const d = new Date(year, parseInt(month) - 1, day);
+    const monthName = d.toLocaleString('default', { month: 'long' });
+    return `${monthName} ${parseInt(day)}, ${year}`; 
+};
+
+
+// ==========================================
+// EXISTING LETTER LOGIC (Updated)
+// ==========================================
+
+// Dropdown Logic: Show/Hide inputs based on letter type
+const letterType = document.getElementById('letterType');
+const noteReason = document.getElementById('noteReason');
+const returnDate = document.getElementById('returnDate');
+
+if (letterType) {
+    letterType.addEventListener('change', (e) => {
+        const type = e.target.value;
+        if (type === 'custom') {
+            if(noteReason) noteReason.style.display = 'block';
+            if(returnDate) returnDate.style.display = 'none';
+        } else if (type === 'return') {
+            if(noteReason) noteReason.style.display = 'none';
+            if(returnDate) returnDate.style.display = 'block';
+        } else if (type === 'general') {
+            if(noteReason) noteReason.style.display = 'none';
+            if(returnDate) returnDate.style.display = 'none';
+        }
+    });
+}
+function toTitleCase(str) {
+  return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+}
+
+// Generate Button Logic
+const generateNoteBtn = document.getElementById('generateNoteBtn');
+if (generateNoteBtn) {
+    generateNoteBtn.addEventListener('click', () => {
+        const type = document.getElementById('letterType').value;
+        const name = document.getElementById('noteName').value.trim();
+        const dob = document.getElementById('noteDOB').value.trim();
+        const status = document.getElementById('noteStatus');
+
+        if (!name || !dob) {
+            status.style.color = "red";
+            status.innerText = "Name and DOB are required.";
+            return;
+        }
+
+        // Formulate the Body Text based on the template
+        let bodyText = "";
+        if (type === 'custom') {
+            const reason = document.getElementById('noteReason').value.trim();
+            if (!reason) return status.innerText = "Reason required.";
+            bodyText = `${toTitleCase(name)} was seen today in my office for ${reason}. If you have any additional questions, please do not hesitate to contact my office at (631) 543 - 8844. Thank you.`;
+        
+        } else if (type === 'general') {
+            bodyText = `${toTitleCase(name)} was seen in my office today.`;
+        
+        } else if (type === 'return') {
+            const rDateRaw = document.getElementById('returnDate').value.trim();
+            if (!rDateRaw) return status.innerText = "Return date required.";
+            
+            // --- NEW LONG DATE FORMATTING APPLIED HERE ---
+            const longReturnDate = formatLongDate(rDateRaw); 
+
+            bodyText = `${toTitleCase(name)} was seen in my office today for a sick visit. Please excuse the patient from missing work and they may return on ${longReturnDate}. If you have any additional questions, please do not hesitate to contact my office at (631) 543 - 8844. Thank you.`;
+        }
+
+        // Helper to format date for the top of the letter
+        const getFormattedDate = () => {
+            const d = new Date();
+            const month = d.toLocaleString('default', { month: 'long' });
+            const day = d.getDate();
+            const nth = (day) => {
+                if (day > 3 && day < 21) return 'th';
+                switch (day % 10) {
+                    case 1: return "st";
+                    case 2: return "nd";
+                    case 3: return "rd";
+                    default: return "th";
+                }
+            };
+            return `${month} ${day}${nth(day)}, ${d.getFullYear()}`;
+        };
+
+        const letterData = {
+            date: getFormattedDate(),
+            name: name,
+            dob: dob,
+            bodyText: bodyText
+        };
+
+        chrome.storage.local.set({
+            currentLetter: letterData
+        }, () => {
+            status.style.color = "#0094FF";
+            status.innerText = "Generating...";
+            chrome.tabs.create({ url: 'letter.html' });
+            setTimeout(() => { status.innerText = ""; }, 2000);
+        });
+    });
+}
